@@ -7,7 +7,7 @@ services:
       - GPIOZERO_PIN_FACTORY=pigpio
       - PIGPIO_ADDR=172.17.0.1
     volumes:
-      - hassio:/config
+      - ./hassio:/config
       - /etc/localtime:/etc/localtime:ro
       - /run/dbus:/run/dbus:ro
     restart: unless-stopped
