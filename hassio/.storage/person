@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "minor_version": 1,
+  "key": "person",
+  "data": {
+    "items": [
+      {
+        "id": "velometer",
+        "name": "VéloMeter",
+        "user_id": "b1d767509fc9427e854a24bd76ef94fc",
+        "device_trackers": []
+      }
+    ]
+  }
+}

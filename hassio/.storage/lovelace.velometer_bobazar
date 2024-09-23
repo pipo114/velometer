@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "lovelace.velometer_bobazar",
+  "data": {
+    "config": {
+      "views": [
+        {
+          "type": "sections",
+          "max_columns": 4,
+          "sections": [
+            {
+              "type": "grid",
+              "cards": [
+                {
+                  "type": "horizontal-stack",
+                  "cards": [
+                    {
+                      "type": "vertical-stack",
+                      "cards": [
+                        {
+                          "type": "entities",
+                          "entities": [
+                            {
+                              "entity": "sensor.velo1_wh",
+                              "name": "Energie cumulée"
+                            },
+                            {
+                              "entity": "script.reset_velo_1",
+                              "name": "Reset"
+                            }
+                          ],
+                          "title": "Vélo 1"
+                        },
+                        {
+                          "type": "gauge",
+                          "entity": "sensor.velo1_w",
+                          "name": "Puissance instantannée",
+                          "min": 0,
+                          "needle": true,
+                          "max": 800
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "horizontal-stack",
+                  "cards": [
+                    {
+                      "type": "vertical-stack",
+                      "cards": [
+                        {
+                          "type": "entities",
+                          "entities": [
+                            {
+                              "entity": "binary_sensor.velo2"
+                            },
+                            {
+                              "entity": "sensor.velo2_wh",
+                              "name": "Energie cumulée",
+                              "secondary_info": "none"
+                            },
+                            {
+                              "entity": "script.reset_velo_2",
+                              "name": "Reset"
+                            }
+                          ],
+                          "title": "Vélo 2"
+                        },
+                        {
+                          "type": "gauge",
+                          "entity": "sensor.velo2_w",
+                          "name": "Puissance instantannée",
+                          "min": 0,
+                          "needle": true,
+                          "unit": "W",
+                          "max": 800
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {
+                  "type": "entity",
+                  "entity": "sensor.global_kwh",
+                  "name": "Energie totale produite"
+                },
+                {
+                  "type": "markdown",
+                  "content": "| Défi | Energie (Wh) | Vélo 1 | Vélo 2\n| ----------- | :-----------: | :-----------: | :-----------: |\n| {{ state_attr('binary_sensor.jalon_velo1_1', 'friendly_name') }}  | {{ state_attr('binary_sensor.jalon_velo1_1', 'target') }} | {% if is_state('binary_sensor.jalon_velo1_1', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %} | {% if is_state('binary_sensor.jalon_velo2_1', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %}\n| {{ state_attr('binary_sensor.jalon_velo1_2', 'friendly_name') }}  | {{ state_attr('binary_sensor.jalon_velo1_2', 'target') }} | {% if is_state('binary_sensor.jalon_velo1_2', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %} | {% if is_state('binary_sensor.jalon_velo2_2', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %}\n| {{ state_attr('binary_sensor.jalon_velo1_3', 'friendly_name') }}  | {{ state_attr('binary_sensor.jalon_velo1_3', 'target') }} | {% if is_state('binary_sensor.jalon_velo1_3', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %} | {% if is_state('binary_sensor.jalon_velo2_3', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %}\n| {{ state_attr('binary_sensor.jalon_velo1_4', 'friendly_name') }}  | {{ state_attr('binary_sensor.jalon_velo1_4', 'target') }} | {% if is_state('binary_sensor.jalon_velo1_4', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %} | {% if is_state('binary_sensor.jalon_velo2_4', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %}\n| {{ state_attr('binary_sensor.jalon_velo1_5', 'friendly_name') }}  | {{ state_attr('binary_sensor.jalon_velo1_5', 'target') }} | {% if is_state('binary_sensor.jalon_velo1_5', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %} | {% if is_state('binary_sensor.jalon_velo2_5', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %}\n| {{ state_attr('binary_sensor.jalon_velo1_6', 'friendly_name') }}  | {{ state_attr('binary_sensor.jalon_velo1_6', 'target') }} | {% if is_state('binary_sensor.jalon_velo1_6', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %} | {% if is_state('binary_sensor.jalon_velo2_6', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %}\n| {{ state_attr('binary_sensor.jalon_velo1_7', 'friendly_name') }}  | {{ state_attr('binary_sensor.jalon_velo1_7', 'target') }} | {% if is_state('binary_sensor.jalon_velo1_7', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %} | {% if is_state('binary_sensor.jalon_velo2_7', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %}\n",
+                  "title": "Défis individuels"
+                },
+                {
+                  "type": "markdown",
+                  "content": "| Défi | Energie (kWh) | Atteint ?  |\n| ----------- | :-----------: | :-----------: | \n| {{ state_attr('binary_sensor.jalon_global_1', 'friendly_name') }}  | {{ state_attr('binary_sensor.jalon_global_1', 'target') }} | {% if is_state('binary_sensor.jalon_global_1', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %} |\n| {{ state_attr('binary_sensor.jalon_global_2', 'friendly_name') }}  | {{ state_attr('binary_sensor.jalon_global_2', 'target') }} | {% if is_state('binary_sensor.jalon_global_2', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %} |\n| {{ state_attr('binary_sensor.jalon_global_3', 'friendly_name') }}  | {{ state_attr('binary_sensor.jalon_global_3', 'target') }} | {% if is_state('binary_sensor.jalon_global_3', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %} |\n| {{ state_attr('binary_sensor.jalon_global_4', 'friendly_name') }}  | {{ state_attr('binary_sensor.jalon_global_4', 'target') }} | {% if is_state('binary_sensor.jalon_global_4', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %} |\n| {{ state_attr('binary_sensor.jalon_global_5', 'friendly_name') }}  | {{ state_attr('binary_sensor.jalon_global_5', 'target') }} | {% if is_state('binary_sensor.jalon_global_5', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %} |\n| {{ state_attr('binary_sensor.jalon_global_6', 'friendly_name') }}  | {{ state_attr('binary_sensor.jalon_global_6', 'target') }} | {% if is_state('binary_sensor.jalon_global_6', 'on') %}<ha-icon icon=\"mdi:check-circle-outline\"></ha-icon>{% else %}<ha-icon icon=\"mdi:circle-outline\"></ha-icon>{% endif %} |\n",
+                  "title": "Défis de BoBazar"
+                }
+              ]
+            }
+          ],
+          "cards": [],
+          "icon": "mdi:bike-fast"
+        }
+      ],
+      "title": "Le VéloMètre de BoBazar"
+    }
+  }
+}

@@ -1,0 +1,227 @@
+# Loads default set of integrations. Do not remove.
+default_config:
+
+
+# FONCTIONNEMENT
+# binary_sensor.velo1 up  -> lance le script d'incrementation qui augente le compteur global et vélo1
+# compteur vélo en Wh (template) -> compteur * STEP_VELO (template)
+# 
+# les gauges se basent sur le binary_sensor.gpio_velo
+
+#CONFIGURATION:ah oui 
+# - STEP_VELO doit être défini en fonction du vélo dans ce fichier (velo1_wh.step et velo2_wh.step)
+
+
+
+homeassistant:
+  name: Vélo BoBazar 2024
+  # permet de définir les nom des entités ici qui seront affichés dans l'UI
+  customize:
+    binary_sensor.jalon_global_1:
+      friendly_name: Aller en vélo dans le centre de Montcuq
+      target: 0.715
+    binary_sensor.jalon_global_2:
+      friendly_name: Consommation d'électricité journalière moyenne d'un français
+      target: 5.9
+    binary_sensor.jalon_global_3:
+      friendly_name: Aller chez Tonton en voiture à essence
+      target: 10
+    binary_sensor.jalon_global_4:
+      friendly_name: Rester UNE HEURE sous la douche (avec chauffe eau électrique)
+      target: 24
+    binary_sensor.jalon_global_5:
+      friendly_name: Regarder l'intégralité des films d'Alain Delon
+      target: 40
+    binary_sensor.jalon_global_6:
+      friendly_name: Miner un BitCoin (en 2022)
+      target: 672
+    binary_sensor.jalon_velo1_1:
+      friendly_name: Demander un blague pourrie à ChatGPT
+      target: 3
+    binary_sensor.jalon_velo1_2:
+      friendly_name: Ecouter le dernier album de Jul sur Spotify et saigner des oreilles
+      target: 12.5
+    binary_sensor.jalon_velo1_3:
+      friendly_name: Faire 1 Km en vélo électrique 
+      target: 20
+    binary_sensor.jalon_velo1_4:
+      friendly_name: Regarder un épisode des Simpsons
+      target: 25.2
+    binary_sensor.jalon_velo1_5:
+      friendly_name: Se faire griller la biscotte
+      target: 40
+    binary_sensor.jalon_velo1_6:
+      friendly_name: Recharger son Womanizer
+      target: 86
+    binary_sensor.jalon_velo1_7:
+      friendly_name: Regarder un film de 2h hyper chiant
+      target: 140
+    binary_sensor.jalon_velo2_1:
+      friendly_name: Demander un blague pourrie à ChatGPT
+      target: 3
+    binary_sensor.jalon_velo2_2:
+      friendly_name: Ecouter le dernier album de Jul sur Spotify et saigner des oreilles
+      target: 12.5
+    binary_sensor.jalon_velo2_3:
+      friendly_name: Faire 1 Km en vélo électrique 
+      target: 20
+    binary_sensor.jalon_velo2_4:
+      friendly_name: Regarder un épisode des Simpsons
+      target: 25.2
+    binary_sensor.jalon_velo2_5:
+      friendly_name: Se faire griller la biscotte
+      target: 40
+    binary_sensor.jalon_velo2_6:
+      friendly_name: Recharger son Womanizer
+      target: 86
+    binary_sensor.jalon_velo2_7:
+      friendly_name: Regarder un film de 2h hyper chiant
+      target: 140
+    # STEP_VELO defintion
+    # a chaque impulsion, cela ajout $step Wh aux compteurs 
+    input_number.velo1_wh:
+      step: 0.069
+    input_number.velo2_wh:
+      step: 0.01905
+
+# calcul du ratio de vélo 2 (enfant)
+# 10 km en 1h à 10km/h -> 150Wh
+# roue de 16' = 1.27m= 0.00127km
+# donc 0.00127km = 0.01905Wh
+
+# pour un adulte, on est plutôt autour de 1 tour de 0.3Wh
+
+# Archive: la valeur 1.13 a été mesurée après étalonage vs le capteur du vélo d'appartement.
+# Il s'agit d'un un tour de pédale et non sur un tour de roue.
+
+# la valeur 0.069Wh / tour de pédale a été calculée:
+# 1 adulte pédale une 1h -> 250 Wh
+# 1 tour de pédale par seconde -> 3600 tour de pédale /h
+# 1 tour de pédale = 0.069Wh
+
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+binary_sensor:
+  - platform: remote_rpi_gpio
+    host: 172.17.0.1
+    ports:
+      12: velo1
+      6: velo2
+
+input_number:
+  global_wh:
+    name: Compteur global
+    unit_of_measurement: "Wh"
+    min: 0
+    max: 300000
+  velo1_wh:
+    name: Compteur Vélo 1
+    unit_of_measurement: "Wh"
+    min: 0
+    max: 300000
+  velo2_wh:
+    name: Compteur Vélo 2
+    unit_of_measurement: "Wh"
+    min: 0
+    max: 300000
+
+template:
+  - sensor:
+      #compteurs en Wh
+      # Compteur vélo 1
+      - name: velo1_wh
+        unit_of_measurement: "Wh"
+        icon: mdi:bike
+        state: "{{ states('input_number.velo1_wh') | float(0)}}"
+        # Compteur vélo 2
+      - name: velo2_wh
+        unit_of_measurement: "Wh"
+        icon: mdi:bike
+        state: "{{ states('input_number.velo2_wh') | float(0) }}"
+      # compteurs global en KWh
+      # Compteur global
+      - name: global_kwh
+        unit_of_measurement: "KWh"
+        icon: mdi:account-group
+        state: "{{ (states('input_number.global_wh') | float(0) / 1000) | round(3) }}"
+  
+      # puissances instantanées
+      - name: velo1_w
+        unit_of_measurement: "W"
+        icon: mdi:lightning-bolt
+        state: "{{ (states('sensor.moyenne_velo_1') | float * state_attr('input_number.velo1_wh','step') * 3600 / 5) | round(0) }}"
+      - name: velo2_w
+        unit_of_measurement: "W"
+        icon: mdi:lightning-bolt
+        state: "{{ (states('sensor.moyenne_velo_2') | float * state_attr('input_number.velo2_wh','step') * 3600 / 5) | round(0) }}"
+        
+
+  - binary_sensor:
+      # jalons globaux
+      - state: "{{ states('sensor.global_kwh') | float(0) > 0.715 }}"
+        name: jalon_global_1
+      - state: "{{ states('sensor.global_kwh') | float(0) > 5.9 }}"
+        name: jalon_global_2
+      - state: "{{ states('sensor.global_kwh') | float(0) > 10 }}"
+        name: jalon_global_3
+      - state: "{{ states('sensor.global_kwh') | float(0) > 24 }}"
+        name: jalon_global_4
+      - state: "{{ states('sensor.global_kwh') | float(0) > 40 }}"
+        name: jalon_global_5
+      - state: "{{ states('sensor.global_kwh') | float(0) > 672 }}"
+        name: jalon_global_6
+      # jalons velo1
+      - state: "{{ states('sensor.velo1_wh') | float(2) > 3 }}"
+        name: jalon_velo1_1
+      - state: "{{ states('sensor.velo1_wh') | float(2) > 8 }}"
+        name: jalon_velo1_2
+      - state: "{{ states('sensor.velo1_wh') | float(2) > 12.67 }}"
+        name: jalon_velo1_3
+        # TODO incohérence avec données sur jalon_global_5 
+      - state: "{{ states('sensor.velo1_wh') | float(2) > 25.2 }}"
+        name: jalon_velo1_4
+      - state: "{{ states('sensor.velo1_wh') | float(2) > 40 }}"
+        name: jalon_velo1_5
+      - state: "{{ states('sensor.velo1_wh') | float(2) > 86 }}"
+        name: jalon_velo1_6
+      - state: "{{ states('sensor.velo1_wh') | float(2) > 200 }}"
+        name: jalon_velo1_7
+      # jalons velo2
+      - state: "{{ states('input_number.velo2_wh') | float(2) > 3 }}"
+        name: jalon_velo2_1
+      - state: "{{ states('input_number.velo2_wh') | float(2) > 8 }}"
+        name: jalon_velo2_2
+      - state: "{{ states('input_number.velo2_wh') | float(2) > 12.67 }}"
+        name: jalon_velo2_3
+        # TODO incohérence avec données sur jalon_global_5 
+      - state: "{{ states('input_number.velo2_wh') | float(2) > 25.2 }}"
+        name: jalon_velo2_4
+      - state: "{{ states('input_number.velo2_wh') | float(2) > 40 }}"
+        name: jalon_velo2_5
+      - state: "{{ states('input_number.velo2_wh') | float(2) > 86 }}"
+        name: jalon_velo2_6
+        # TODO
+      - state: "{{ states('input_number.velo2_wh') | float(2) > 200 }}"
+        name: jalon_velo2_7
+
+#Pour la puissance instantannée (gauge)
+sensor:
+  - platform: statistics
+    name: Moyenne velo 1
+    entity_id: binary_sensor.velo1
+    state_characteristic: count_on
+    max_age:
+      seconds: 5
+  - platform: statistics
+    name: Moyenne velo 2
+    entity_id: binary_sensor.velo2
+    state_characteristic: count_on
+    max_age:
+      seconds: 5

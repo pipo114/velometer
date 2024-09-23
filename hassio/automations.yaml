@@ -1,0 +1,38 @@
+- id: '1718047962516'
+  alias: Incrémentation Compteur Vélo 1
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.velo1
+    from: 'off'
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+  condition: []
+  action:
+  - service: script.turn_on
+    target:
+      entity_id: script.velo1_incrementer
+  mode: single
+- id: '1720348804044'
+  alias: 'Incrémentation vélo 2 '
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.velo2
+    from: 'off'
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+  condition: []
+  action:
+  - service: script.turn_on
+    target:
+      entity_id: script.velo2_incrementer
+  mode: single

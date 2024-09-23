@@ -1,0 +1,56 @@
+reset_velo_1:
+  alias: reset vélo 1
+  sequence:
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.velo1_wh
+    data:
+      value: 0
+  mode: single
+  icon: mdi:lock-reset
+
+reset_velo_2:
+  alias: reset vélo 2 
+  sequence:
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.velo2_wh
+    data:
+      value: 0
+  mode: single
+  icon: mdi:lock-reset
+
+velo1_incrementer:
+  alias: 'Vélo1 : Incrémenter compteur global'
+  sequence:
+  # compteur velo
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.velo1_wh
+    data:
+      value: '{{ states(''input_number.velo1_wh'') | float(0) + state_attr(''input_number.velo1_wh'',''step'') }}'
+  # compteur global
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.global_wh
+    data:
+      value: '{{ states(''input_number.global_wh'') | float(0) + state_attr(''input_number.velo1_wh'',''step'') }}'
+  mode: single
+
+velo2_incrementer:
+  alias: 'Vélo2 : Incrémenter compteur global'
+  sequence:
+  # compteur velo
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.velo2_wh
+    data:
+      value: '{{ states(''input_number.velo2_wh'') | float(0) + state_attr(''input_number.velo2_wh'',''step'') }}'
+  # compteur global
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.global_wh
+    data:
+      value: '{{ states(''input_number.global_wh'') | float(0) + state_attr(''input_number.velo2_wh'',''step'') }}'
+  mode: single
+
