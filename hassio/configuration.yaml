@@ -19,12 +19,12 @@ homeassistant:
   customize:
     binary_sensor.jalon_global_1:
       friendly_name: Aller en vélo dans le centre de Montcuq
-      target: 0.715
+      target: 2.9
     binary_sensor.jalon_global_2:
       friendly_name: Consommation d'électricité journalière moyenne d'un français
       target: 5.9
     binary_sensor.jalon_global_3:
-      friendly_name: Aller chez Tonton en voiture à essence
+      friendly_name: Aller "Chez Tonton" en voiture à essence
       target: 10
     binary_sensor.jalon_global_4:
       friendly_name: Rester UNE HEURE sous la douche (avec chauffe eau électrique)
@@ -33,10 +33,10 @@ homeassistant:
       friendly_name: Regarder l'intégralité des films d'Alain Delon
       target: 40
     binary_sensor.jalon_global_6:
-      friendly_name: Miner un BitCoin (en 2022)
+      friendly_name: Miner un BitCoin
       target: 672
     binary_sensor.jalon_velo1_1:
-      friendly_name: Demander un blague pourrie à ChatGPT
+      friendly_name: Recharger son Womanizer (ou une manette de jeux)
       target: 3
     binary_sensor.jalon_velo1_2:
       friendly_name: Ecouter le dernier album de Jul sur Spotify et saigner des oreilles
@@ -51,13 +51,13 @@ homeassistant:
       friendly_name: Se faire griller la biscotte
       target: 40
     binary_sensor.jalon_velo1_6:
-      friendly_name: Recharger son Womanizer
+      friendly_name: Laisser le ventilateur tourner pendant une nuit
       target: 86
     binary_sensor.jalon_velo1_7:
-      friendly_name: Regarder un film de 2h hyper chiant
-      target: 140
+      friendly_name: Regarder un navet de 2h sans intérêt sur Netflix
+      target: 150
     binary_sensor.jalon_velo2_1:
-      friendly_name: Demander un blague pourrie à ChatGPT
+      friendly_name: Recharger sa manette de jeux
       target: 3
     binary_sensor.jalon_velo2_2:
       friendly_name: Ecouter le dernier album de Jul sur Spotify et saigner des oreilles
@@ -72,11 +72,11 @@ homeassistant:
       friendly_name: Se faire griller la biscotte
       target: 40
     binary_sensor.jalon_velo2_6:
-      friendly_name: Recharger son Womanizer
+      friendly_name: Laisser le ventilateur tourner pendant une nuit
       target: 86
     binary_sensor.jalon_velo2_7:
-      friendly_name: Regarder un film de 2h hyper chiant
-      target: 140
+      friendly_name: Regarder un navet de 2h sans intérêt sur Netflix
+      target: 150
     # STEP_VELO defintion
     # a chaque impulsion, cela ajout $step Wh aux compteurs 
     input_number.velo1_wh:
@@ -165,7 +165,7 @@ template:
 
   - binary_sensor:
       # jalons globaux
-      - state: "{{ states('sensor.global_kwh') | float(0) > 0.715 }}"
+      - state: "{{ states('sensor.global_kwh') | float(0) > 2.9 }}"
         name: jalon_global_1
       - state: "{{ states('sensor.global_kwh') | float(0) > 5.9 }}"
         name: jalon_global_2
@@ -191,7 +191,7 @@ template:
         name: jalon_velo1_5
       - state: "{{ states('sensor.velo1_wh') | float(2) > 86 }}"
         name: jalon_velo1_6
-      - state: "{{ states('sensor.velo1_wh') | float(2) > 200 }}"
+      - state: "{{ states('sensor.velo1_wh') | float(2) > 150 }}"
         name: jalon_velo1_7
       # jalons velo2
       - state: "{{ states('input_number.velo2_wh') | float(2) > 3 }}"
@@ -208,7 +208,7 @@ template:
       - state: "{{ states('input_number.velo2_wh') | float(2) > 86 }}"
         name: jalon_velo2_6
         # TODO
-      - state: "{{ states('input_number.velo2_wh') | float(2) > 200 }}"
+      - state: "{{ states('input_number.velo2_wh') | float(2) > 150 }}"
         name: jalon_velo2_7
 
 #Pour la puissance instantannée (gauge)
